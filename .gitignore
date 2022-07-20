@@ -70,7 +70,6 @@ publish/
 
 # Publish Web Output
 *.Publish.xml
-*.pubxml
 *.azurePubxml
 
 # NuGet Packages Directory
@@ -131,3 +130,6 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+*.v2
+*.lock
+*.vsidx
