@@ -133,3 +133,4 @@ _NCrunch*
 *.v2
 *.lock
 *.vsidx
+src/.vs/isun/config/applicationhost.config
