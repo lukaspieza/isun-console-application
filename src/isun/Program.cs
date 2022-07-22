@@ -13,11 +13,11 @@ host.Services.GetRequiredService<IWeatherForecastService>().ShowAndSaveWeatherFo
 static IHostBuilder CreateHostBuilder(string[] args)
 {
     var hostBuilder = Host.CreateDefaultBuilder(args)
-        .ConfigureAppConfiguration((context, builder) =>
+        .ConfigureAppConfiguration((_, builder) =>
         {
             builder.SetBasePath(Directory.GetCurrentDirectory());
         })
-        .ConfigureServices((context, services) =>
+        .ConfigureServices((_, services) =>
         {
             services.AddTransient<IWeatherForecastService, WeatherForecastService>();
             services.AddTransient<ICitiesProvider, CitiesProvider>();

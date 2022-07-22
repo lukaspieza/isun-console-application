@@ -30,7 +30,7 @@ public class CitiesProvider : ICitiesProvider
         return arguments;
     }
 
-    public int VariableName()
+    private static int VariableName()
     {
         return 1;
     }

@@ -1,0 +1,240 @@
+using isun.Domain.Interfaces.Infrastructure;
+using isun.Infrastructure.Implementations;
+
+namespace isun.Infrastructure.Tests;
+
+public class CitiesProviderTests
+{
+    private Mock<IArgumentsOperationsProvider> _mockProvider = null!;
+    private string[]? _arguments;
+    private const string ExpectedArgument = "Expected";
+    private const string ExpectedCityOne = "Vilnius";
+    private const string ExpectedCityTwo = "Kaunas";
+
+    [SetUp]
+    public void Setup()
+    {
+        _mockProvider = new Mock<IArgumentsOperationsProvider>();
+        _arguments = new[] { ExpectedArgument };
+    }
+
+    [Test]
+    public void NullArgumentsProvided_ExpectEmptyList()
+    {
+        // Arrange
+        _arguments = null;
+        const int expectedCount = 0;
+
+        // Act
+        var actual = GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+    }
+
+    [Test]
+    public void EmptyArgumentsProvided_ExpectEmptyList()
+    {
+        // Arrange
+        _arguments = Array.Empty<string>();
+        const int expectedCount = 0;
+
+        // Act
+        var actual = GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+    }
+
+    [Test]
+    public void ArgumentsOperationsProvider_VariableNameCities_CalledOnce()
+    {
+        // Arrange
+
+        // Act
+        GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        _mockProvider.Verify(a => a.VariableNameCities(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+    }
+
+    [Test]
+    public void ArgumentsOperationsProvider_VariableNameCities_CalledWithArgument()
+    {
+        // Arrange
+
+        // Act
+        GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        _mockProvider.Verify(a => a.VariableNameCities(It.Is<string>(b => b == ExpectedArgument), It.IsAny<string>()));
+    }
+
+    [Test]
+    public void ArgumentsOperationsProvider_VariableNameCities_CalledWithDefaultVariableName()
+    {
+        // Arrange
+        const string expectedVariableName = "--cities";
+
+        // Act
+        GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        _mockProvider.Verify(a => a.VariableNameCities(It.IsAny<string>(), It.Is<string>(b => b == expectedVariableName)));
+    }
+
+    [Test]
+    public void VariableNameSkipped_Expected()
+    {
+        // Arrange
+        const int expectedCount = 1;
+        const string notExpectedVariableName = "--cities";
+        SetupFullArgumentsOperationsProviderFlow();
+        _arguments = new[] { notExpectedVariableName, "Vilnius" };
+
+        // Act
+        var actual = GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+        CollectionAssert.DoesNotContain(actual, notExpectedVariableName);
+        _mockProvider.Verify(a => a.VariableNameCities(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expectedCount));
+    }
+
+    [Test]
+    public void TakeUntilNextVariableValue_ExpectedOneCity()
+    {
+        // Arrange
+        const int expectedCount = 1;
+        SetupFullArgumentsOperationsProviderFlow();
+        _arguments = new[] { "--cities", ExpectedCityOne };
+
+        // Act
+        var actual = GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+        CollectionAssert.Contains(actual, ExpectedCityOne);
+        _mockProvider.Verify(a => a.VariableValue(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expectedCount));
+    }
+
+    [Test]
+    public void TakeUntilNextVariableValue_ExpectedOneCity_WhenOtherVariableAtEnd()
+    {
+        // Arrange
+        const int expectedCount = 1;
+        SetupFullArgumentsOperationsProviderFlow();
+        _arguments = new[] { "--cities", ExpectedCityOne, "--other", "otherValue" };
+
+        // Act
+        var actual = GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+        CollectionAssert.Contains(actual, ExpectedCityOne);
+        _mockProvider.Verify(a => a.VariableValue(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expectedCount + 1));
+    }
+
+    [Test]
+    public void TakeUntilNextVariableValue_ExpectedMultipleCities()
+    {
+        // Arrange
+        const int expectedCount = 2;
+        SetupFullArgumentsOperationsProviderFlow();
+        _arguments = new[] { "--cities", ExpectedCityOne, ExpectedCityTwo };
+
+        // Act
+        var actual = GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+        CollectionAssert.Contains(actual, ExpectedCityOne);
+        CollectionAssert.Contains(actual, ExpectedCityTwo);
+        _mockProvider.Verify(a => a.VariableValue(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expectedCount));
+    }
+
+    [Test]
+    public void TakeUntilNextVariableValue_ExpectedMultipleCities_WhenOtherVariableAtEnd()
+    {
+        // Arrange
+        const int expectedCount = 2;
+        SetupFullArgumentsOperationsProviderFlow();
+        _arguments = new[] { "--cities", ExpectedCityOne, ExpectedCityTwo, "--other", "otherValue" };
+
+        // Act
+        var actual = GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+        CollectionAssert.Contains(actual, ExpectedCityOne);
+        CollectionAssert.Contains(actual, ExpectedCityTwo);
+        _mockProvider.Verify(a => a.VariableValue(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expectedCount + 1));
+    }
+
+    [Test]
+    public void SplitBySeparator_ExpectedCitiesSeparatedBySeparatorWithoutSpace()
+    {
+        // Arrange
+        const int expectedCount = 2;
+        SetupFullArgumentsOperationsProviderFlow();
+        _arguments = new[] { "--cities", $"{ExpectedCityOne},{ExpectedCityTwo}", "--other", "otherValue" };
+
+        // Act
+        var actual = GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+        CollectionAssert.Contains(actual, ExpectedCityOne);
+        CollectionAssert.Contains(actual, ExpectedCityTwo);
+        _mockProvider.Verify(a => a.SplitBySeparator(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expectedCount));
+    }
+
+    [Test]
+    public void SplitBySeparator_ExpectedCitiesSeparatedBySeparatorWithSpace()
+    {
+        // Arrange
+        const int expectedCount = 2;
+        SetupFullArgumentsOperationsProviderFlow();
+        _arguments = new[] { "--cities", $"{ExpectedCityOne},", ExpectedCityTwo, "--other", "otherValue" };
+
+        // Act
+        var actual = GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+        CollectionAssert.Contains(actual, ExpectedCityOne);
+        CollectionAssert.Contains(actual, ExpectedCityTwo);
+        _mockProvider.Verify(a => a.SplitBySeparator(It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(expectedCount));
+    }
+
+    [Test]
+    public void ArgumentIsNotEmpty_CalledMultipleTimes()
+    {
+        // Arrange
+        SetupFullArgumentsOperationsProviderFlow();
+        _arguments = new[] { "--cities", "Vilnius,", "Kaunas", "--other", "otherValue" };
+
+        // Act
+        GetCitiesProvider().Get(_arguments);
+
+        // Assert
+        _mockProvider.Verify(a => a.ArgumentIsNotEmpty(It.IsAny<string>()), Times.Exactly(3));
+    }
+
+    private void SetupFullArgumentsOperationsProviderFlow()
+    {
+        _mockProvider.Setup(a => a.VariableNameCities(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(false);
+        _mockProvider.Setup(a => a.VariableValue(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns((string argument, string _) => !argument.StartsWith("--"));
+        _mockProvider.Setup(a => a.SplitBySeparator(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns((string argument, string _) => argument.Split(","));
+        _mockProvider.Setup(a => a.ArgumentIsNotEmpty(It.IsAny<string>()))
+            .Returns((string argument) => !string.IsNullOrWhiteSpace(argument));
+    }
+
+    private CitiesProvider GetCitiesProvider()
+    {
+        return new CitiesProvider(_mockProvider.Object);
+    }
+}
