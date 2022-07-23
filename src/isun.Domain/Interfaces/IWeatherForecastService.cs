@@ -2,6 +2,6 @@
 
 public interface IWeatherForecastService
 {
-    string ShowAndSaveWeatherForecast(List<string> cities);
-    string ShowAndSaveWeatherForecast(string[]? args);
+    string GetWeatherForecast(List<string> cities);
+    string GetWeatherForecast(string[]? args);
 }

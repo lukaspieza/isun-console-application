@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using NLog.Web;
 
 var host = CreateHostBuilder(args).Build();
-host.Services.GetRequiredService<IWeatherForecastService>().ShowAndSaveWeatherForecast(args);
+host.Services.GetRequiredService<IWeatherForecastService>().GetWeatherForecast(args);
 
 static IHostBuilder CreateHostBuilder(string[] args)
 {
@@ -19,6 +19,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         })
         .ConfigureServices((_, services) =>
         {
+            services.AddTransient<IWeatherForecastProvider, WeatherForecastProvider>();
             services.AddTransient<IWeatherForecastService, WeatherForecastService>();
             services.AddTransient<ICitiesProvider, CitiesProvider>();
             services.AddTransient<IArgumentsOperationsProvider, ArgumentsOperationsProvider>();

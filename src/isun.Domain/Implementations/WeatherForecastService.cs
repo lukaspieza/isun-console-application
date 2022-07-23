@@ -7,29 +7,28 @@ namespace isun.Domain.Implementations;
 public class WeatherForecastService : IWeatherForecastService
 {
     //private readonly ILogger<WeatherForecastService> _logger;
+    private readonly IWeatherForecastProvider _forecastProvider;
     private readonly ICitiesProvider _citiesProvider;
 
     public WeatherForecastService(
         //ILogger<WeatherForecastService> logger,
+        IWeatherForecastProvider forecastProvider,
         ICitiesProvider citiesProvider)
     {
+        _forecastProvider = forecastProvider;
         _citiesProvider = citiesProvider;
         //_logger = logger;
     }
 
-    public string ShowAndSaveWeatherForecast(string[]? args)
+    public string GetWeatherForecast(string[]? args)
     {
         var cities = _citiesProvider.Get(args);
-        if (cities.Any()) 
-            return ShowAndSaveWeatherForecast(cities);
-
-        var text = args != null
-            ? $"No --cities provided in args={string.Join(" ", args)}"
-            : "No --cities provided in args=null";
-        return text;
+        return cities.Any()
+            ? GetWeatherForecast(cities)
+            : _forecastProvider.GetMissingArgumentsMessage(args);
     }
 
-    public string ShowAndSaveWeatherForecast(List<string> cities)
+    public string GetWeatherForecast(List<string> cities)
     {
         return string.Empty;
     }
