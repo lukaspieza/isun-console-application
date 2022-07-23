@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\isun.Infrastructure\isun.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\isun.Domain\isun.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

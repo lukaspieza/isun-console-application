@@ -17,24 +17,21 @@ public class WeatherForecastService : IWeatherForecastService
         //_logger = logger;
     }
 
-    public void ShowAndSaveWeatherForecast(string[]? args)
+    public string ShowAndSaveWeatherForecast(string[]? args)
     {
         var cities = _citiesProvider.Get(args);
+        if (cities.Any()) 
+            return ShowAndSaveWeatherForecast(cities);
 
-        if (!cities.Any())
-        {
-            Console.WriteLine(args != null
-                ? $"No --cities provided in args={string.Join(" ", args)}"
-                : "No --cities provided in args=null");
-            return;
-        }
-
-        ShowAndSaveWeatherForecast(cities);
+        var text = args != null
+            ? $"No --cities provided in args={string.Join(" ", args)}"
+            : "No --cities provided in args=null";
+        return text;
     }
 
-    public void ShowAndSaveWeatherForecast(List<string> cities)
+    public string ShowAndSaveWeatherForecast(List<string> cities)
     {
-
+        return string.Empty;
     }
 
     /*private void ShowWeatherForecast()
