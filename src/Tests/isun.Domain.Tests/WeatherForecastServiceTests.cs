@@ -1,12 +1,14 @@
 using isun.Domain.Implementations;
 using isun.Domain.Interfaces;
 using isun.Domain.Interfaces.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace isun.Domain.Tests;
 
 public class WeatherForecastServiceTests
 {
     private Mock<IWeatherForecastProvider> _mockWeatherForecastProvider = null!;
+    private Mock<ILogger<WeatherForecastService>> _mockLogger = null!;
     private Mock<ICitiesProvider> _mockCitiesProvider = null!;
     private string[]? _arguments;
 
@@ -14,6 +16,7 @@ public class WeatherForecastServiceTests
     public void Setup()
     {
         _mockWeatherForecastProvider = new Mock<IWeatherForecastProvider>();
+        _mockLogger = new Mock<ILogger<WeatherForecastService>>();
         _mockCitiesProvider = new Mock<ICitiesProvider>();
         _mockCitiesProvider.Setup(a => a.Get(It.IsAny<string[]?>()))
             .Returns(new List<string>());
@@ -70,6 +73,6 @@ public class WeatherForecastServiceTests
 
     private WeatherForecastService GetWeatherForecastService()
     {
-        return new WeatherForecastService(_mockWeatherForecastProvider.Object, _mockCitiesProvider.Object);
+        return new WeatherForecastService(_mockWeatherForecastProvider.Object, _mockLogger.Object, _mockCitiesProvider.Object);
     }
 }

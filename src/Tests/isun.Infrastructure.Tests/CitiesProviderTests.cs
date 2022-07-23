@@ -1,11 +1,13 @@
 using isun.Domain.Interfaces.Infrastructure;
 using isun.Infrastructure.Implementations;
+using Microsoft.Extensions.Logging;
 
 namespace isun.Infrastructure.Tests;
 
 public class CitiesProviderTests
 {
     private Mock<IArgumentsOperationsProvider> _mockProvider = null!;
+    private Mock<ILogger<CitiesProvider>> _mockLogger = null!;
     private string[]? _arguments;
     private const string ExpectedArgument = "Expected";
     private const string ExpectedCityOne = "Vilnius";
@@ -15,6 +17,7 @@ public class CitiesProviderTests
     public void Setup()
     {
         _mockProvider = new Mock<IArgumentsOperationsProvider>();
+        _mockLogger = new Mock<ILogger<CitiesProvider>>();
         _arguments = new[] { ExpectedArgument };
     }
 
@@ -235,6 +238,6 @@ public class CitiesProviderTests
 
     private CitiesProvider GetCitiesProvider()
     {
-        return new CitiesProvider(_mockProvider.Object);
+        return new CitiesProvider(_mockProvider.Object, _mockLogger.Object);
     }
 }
