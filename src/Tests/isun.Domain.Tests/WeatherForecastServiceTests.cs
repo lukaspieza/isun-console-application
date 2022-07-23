@@ -7,6 +7,7 @@ namespace isun.Domain.Tests;
 
 public class WeatherForecastServiceTests
 {
+    private Mock<IExternalCityWeatherForecastProvider> _weatherForecastProviderMock;
     private Mock<IWeatherForecastProvider> _mockWeatherForecastProvider = null!;
     private Mock<ILogger<WeatherForecastService>> _mockLogger = null!;
     private Mock<ICitiesProvider> _mockCitiesProvider = null!;
@@ -15,6 +16,7 @@ public class WeatherForecastServiceTests
     [SetUp]
     public void Setup()
     {
+        _weatherForecastProviderMock = new Mock<IExternalCityWeatherForecastProvider>();
         _mockWeatherForecastProvider = new Mock<IWeatherForecastProvider>();
         _mockLogger = new Mock<ILogger<WeatherForecastService>>();
         _mockCitiesProvider = new Mock<ICitiesProvider>();
@@ -73,6 +75,9 @@ public class WeatherForecastServiceTests
 
     private WeatherForecastService GetWeatherForecastService()
     {
-        return new WeatherForecastService(_mockWeatherForecastProvider.Object, _mockLogger.Object, _mockCitiesProvider.Object);
+        return new WeatherForecastService(_weatherForecastProviderMock.Object,
+            _mockWeatherForecastProvider.Object,
+            _mockLogger.Object,
+            _mockCitiesProvider.Object);
     }
 }

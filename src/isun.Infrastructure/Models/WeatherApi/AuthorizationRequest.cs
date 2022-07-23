@@ -2,7 +2,7 @@
 
 namespace isun.Infrastructure.Models.WeatherApi;
 
-public class AuthorizationBody
+public class AuthorizationRequest
 {
     [JsonProperty("username")]
     public string UserName { get; set; } = null!;

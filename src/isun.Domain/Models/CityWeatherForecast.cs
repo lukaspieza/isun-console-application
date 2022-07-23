@@ -1,6 +1,6 @@
 ﻿namespace isun.Domain.Models;
 
-public class CityWeather
+public class CityWeatherForecast
 {
     public string City { get; set; } = null!;
     public string Temperature { get; set; } = null!;

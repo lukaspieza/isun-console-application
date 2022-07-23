@@ -1,6 +1,7 @@
 ﻿using isun.Domain.Implementations;
 using isun.Domain.Interfaces;
 using isun.Domain.Interfaces.Infrastructure;
+using isun.Domain.Models.Options;
 using isun.Infrastructure.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,14 +17,18 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureAppConfiguration((_, builder) =>
         {
             builder.SetBasePath(Directory.GetCurrentDirectory());
+            builder.AddJsonFile("appsettings.json", false, false);
         })
-        .ConfigureServices((_, services) =>
+        .ConfigureServices((context, services) =>
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.Configure<AppOptions>(options => context.Configuration.GetSection("AppOptions").Bind(options));
             services.AddTransient<IWeatherForecastProvider, WeatherForecastProvider>();
             services.AddTransient<IWeatherForecastService, WeatherForecastService>();
             services.AddTransient<ICitiesProvider, CitiesProvider>();
             services.AddTransient<IArgumentsOperationsProvider, ArgumentsOperationsProvider>();
             services.AddTransient<IConsoleProvider, ConsoleProvider>();
+            services.AddTransient<IExternalCityWeatherForecastProvider, ExternalCityWeatherForecastProvider>();
         })
         .UseNLog();
 

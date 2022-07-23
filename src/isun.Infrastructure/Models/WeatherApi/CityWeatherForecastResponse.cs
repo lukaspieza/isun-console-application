@@ -2,7 +2,7 @@
 
 namespace isun.Infrastructure.Models.WeatherApi;
 
-public class WeathersResponse
+public class CityWeatherForecastResponse
 {
     [JsonProperty("city")]
     public string City { get; set; } = null!;

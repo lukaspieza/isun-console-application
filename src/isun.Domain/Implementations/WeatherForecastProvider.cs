@@ -1,4 +1,5 @@
 ﻿using isun.Domain.Interfaces;
+using isun.Domain.Models;
 using Microsoft.Extensions.Logging;
 
 namespace isun.Domain.Implementations;
@@ -12,13 +13,13 @@ public class WeatherForecastProvider : IWeatherForecastProvider
         _logger = logger;
     }
 
-    public string GetMissingArgumentsMessage(string[]? args)
+    public List<CityWeatherForecast> GetMissingArgumentsMessage(string[]? args)
     {
         _logger.LogDebug("Getting missing arguments message");
         var message = args != null
             ? $"No --cities provided in args={string.Join(" ", args)}"
             : "No --cities provided in args=null";
         _logger.LogWarning("{message}", message);
-        return message;
+        return new List<CityWeatherForecast>();
     }
 }

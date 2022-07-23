@@ -1,6 +1,8 @@
-﻿namespace isun.Domain.Interfaces;
+﻿using isun.Domain.Models;
+
+namespace isun.Domain.Interfaces;
 
 public interface IWeatherForecastProvider
 {
-    string GetMissingArgumentsMessage(string[]? args);
+    List<CityWeatherForecast> GetMissingArgumentsMessage(string[]? args);
 }
