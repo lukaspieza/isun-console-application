@@ -22,6 +22,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddTransient<IWeatherForecastService, WeatherForecastService>();
             services.AddTransient<ICitiesProvider, CitiesProvider>();
             services.AddTransient<IArgumentsOperationsProvider, ArgumentsOperationsProvider>();
+            services.AddTransient<IConsoleProvider, ConsoleProvider>();
         })
         .UseNLog();
 
