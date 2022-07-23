@@ -1,4 +1,5 @@
 ﻿using isun.Domain.Interfaces.Infrastructure;
+using isun.Domain.Models;
 using Microsoft.Extensions.Logging;
 
 namespace isun.Infrastructure.Implementations;
@@ -14,6 +15,22 @@ public class CitiesProvider : ICitiesProvider
     {
         _operations = operations;
         _logger = logger;
+    }
+
+    public List<CityWeatherForecast> HandleNoCitiesProvided(string[]? args)
+    {
+        _logger.LogDebug("Getting missing arguments message");
+        var message = args != null
+            ? $"No --cities provided in args={string.Join(" ", args)}"
+            : "No --cities provided in args=null";
+        _logger.LogWarning("{message}", message);
+        return new List<CityWeatherForecast>();
+    }
+
+    public List<CityWeatherForecast> HandleNoCitiesProvided()
+    {
+        _logger.LogWarning("No cities were provided");
+        return new List<CityWeatherForecast>();
     }
 
     public List<string> Get(string[]? args)

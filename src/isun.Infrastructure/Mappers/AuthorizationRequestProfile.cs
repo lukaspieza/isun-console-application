@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using isun.Domain.Models.Options;
-using isun.Infrastructure.Models.WeatherApi;
+using isun.Infrastructure.Models.ExternalWeatherApi;
 
 namespace isun.Infrastructure.Mappers;
 

@@ -2,7 +2,7 @@
 using isun.Domain.Interfaces.Infrastructure;
 using isun.Domain.Models;
 using isun.Domain.Models.Options;
-using isun.Infrastructure.Models.WeatherApi;
+using isun.Infrastructure.Models.ExternalWeatherApi;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;

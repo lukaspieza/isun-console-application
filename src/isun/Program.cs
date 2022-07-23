@@ -23,11 +23,9 @@ static IHostBuilder CreateHostBuilder(string[] args)
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.Configure<AppOptions>(options => context.Configuration.GetSection("AppOptions").Bind(options));
-            services.AddTransient<IWeatherForecastProvider, WeatherForecastProvider>();
             services.AddTransient<IWeatherForecastService, WeatherForecastService>();
             services.AddTransient<ICitiesProvider, CitiesProvider>();
             services.AddTransient<IArgumentsOperationsProvider, ArgumentsOperationsProvider>();
-            services.AddTransient<IConsoleProvider, ConsoleProvider>();
             services.AddTransient<IExternalCityWeatherForecastProvider, ExternalCityWeatherForecastProvider>();
         })
         .UseNLog();

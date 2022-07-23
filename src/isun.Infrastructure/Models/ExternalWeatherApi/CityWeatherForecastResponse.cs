@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace isun.Infrastructure.Models.WeatherApi;
+namespace isun.Infrastructure.Models.ExternalWeatherApi;
 
 public class CityWeatherForecastResponse
 {

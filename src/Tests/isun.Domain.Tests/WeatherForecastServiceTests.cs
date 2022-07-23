@@ -8,7 +8,6 @@ namespace isun.Domain.Tests;
 public class WeatherForecastServiceTests
 {
     private Mock<IExternalCityWeatherForecastProvider> _weatherForecastProviderMock;
-    private Mock<IWeatherForecastProvider> _mockWeatherForecastProvider = null!;
     private Mock<ILogger<WeatherForecastService>> _mockLogger = null!;
     private Mock<ICitiesProvider> _mockCitiesProvider = null!;
     private string[]? _arguments;
@@ -17,7 +16,6 @@ public class WeatherForecastServiceTests
     public void Setup()
     {
         _weatherForecastProviderMock = new Mock<IExternalCityWeatherForecastProvider>();
-        _mockWeatherForecastProvider = new Mock<IWeatherForecastProvider>();
         _mockLogger = new Mock<ILogger<WeatherForecastService>>();
         _mockCitiesProvider = new Mock<ICitiesProvider>();
         _mockCitiesProvider.Setup(a => a.Get(It.IsAny<string[]?>()))
@@ -58,7 +56,7 @@ public class WeatherForecastServiceTests
         GetWeatherForecastService().GetWeatherForecast(_arguments);
 
         // Assert
-        _mockWeatherForecastProvider.Verify(a => a.GetMissingArgumentsMessage(It.IsAny<string[]?>()), Times.Once);
+        _mockCitiesProvider.Verify(a => a.HandleNoCitiesProvided(It.IsAny<string[]?>()), Times.Once);
     }
 
     [Test]
@@ -70,13 +68,12 @@ public class WeatherForecastServiceTests
         GetWeatherForecastService().GetWeatherForecast(_arguments);
 
         // Assert
-        _mockWeatherForecastProvider.Verify(a => a.GetMissingArgumentsMessage(It.Is<string[]?>(b => b == _arguments)));
+        _mockCitiesProvider.Verify(a => a.HandleNoCitiesProvided(It.Is<string[]?>(b => b == _arguments)));
     }
 
     private WeatherForecastService GetWeatherForecastService()
     {
         return new WeatherForecastService(_weatherForecastProviderMock.Object,
-            _mockWeatherForecastProvider.Object,
             _mockLogger.Object,
             _mockCitiesProvider.Object);
     }
