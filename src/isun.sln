@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B424038A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "isun.Infrastructure.Tests", "Tests\isun.Infrastructure.Tests\isun.Infrastructure.Tests.csproj", "{EDBF6883-4C00-4A25-AC63-E1304121CCC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isun.Domain.Tests", "Tests\isun.Domain.Tests\isun.Domain.Tests.csproj", "{2611E6D3-0132-4FD5-9415-756A26E9F9D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "isun.Domain.Tests", "Tests\isun.Domain.Tests\isun.Domain.Tests.csproj", "{2611E6D3-0132-4FD5-9415-756A26E9F9D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isun.Startup", "isun.Startup\isun.Startup.csproj", "{C272832C-9F50-4C5A-A16E-64E47A50AFCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{2611E6D3-0132-4FD5-9415-756A26E9F9D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2611E6D3-0132-4FD5-9415-756A26E9F9D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2611E6D3-0132-4FD5-9415-756A26E9F9D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C272832C-9F50-4C5A-A16E-64E47A50AFCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C272832C-9F50-4C5A-A16E-64E47A50AFCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C272832C-9F50-4C5A-A16E-64E47A50AFCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C272832C-9F50-4C5A-A16E-64E47A50AFCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

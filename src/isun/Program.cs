@@ -1,15 +1,26 @@
-﻿using isun.Domain.Implementations;
-using isun.Domain.Interfaces;
-using isun.Domain.Interfaces.Infrastructure;
-using isun.Domain.Models.Options;
-using isun.Infrastructure.Implementations;
+﻿using isun.Implementations;
+using isun.Interfaces;
+using isun.Models;
+using isun.Startup;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NLog.Web;
 
-var host = CreateHostBuilder(args).Build();
-host.Services.GetRequiredService<IWeatherForecastService>().GetWeatherForecast(args);
+try
+{
+    var host = CreateHostBuilder(args).Build();
+    var task = host.Services.GetRequiredService<IBackgroundTimer>();
+    task.Start(args);
+    Console.ReadKey();
+    await task.StopAsync();
+}
+catch (Exception e)
+{
+    Console.WriteLine(e);
+    Console.ReadKey();
+}
 
 static IHostBuilder CreateHostBuilder(string[] args)
 {
@@ -21,12 +32,10 @@ static IHostBuilder CreateHostBuilder(string[] args)
         })
         .ConfigureServices((context, services) =>
         {
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.Configure<AppOptions>(options => context.Configuration.GetSection("AppOptions").Bind(options));
-            services.AddTransient<IWeatherForecastService, WeatherForecastService>();
-            services.AddTransient<ICitiesProvider, CitiesProvider>();
-            services.AddTransient<IArgumentsOperationsProvider, ArgumentsOperationsProvider>();
-            services.AddTransient<IExternalCityWeatherForecastProvider, ExternalCityWeatherForecastProvider>();
+            services.Configure<BackgroundTimerOptions>(options => context.Configuration.GetSection("BackgroundTimerOptions").Bind(options));
+            services.AddTransient<IBackgroundTimer, BackgroundTimer>();
+            services.AddLogging(builder => builder.ClearProviders());
+            services.ConfigureSun(context.Configuration);
         })
         .UseNLog();
 

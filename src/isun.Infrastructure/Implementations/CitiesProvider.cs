@@ -50,7 +50,7 @@ public class CitiesProvider : ICitiesProvider
         foreach (var splitArguments in argumentValues.Select(arg => _operations.SplitBySeparator(arg)))
             arguments.AddRange(splitArguments.Where(_operations.ArgumentIsNotEmpty));
 
-        _logger.LogInformation("Returning {arguments.Count}", arguments.Count);
+        _logger.LogDebug("Returning {arguments.Count}", arguments.Count);
         return arguments;
     }
 

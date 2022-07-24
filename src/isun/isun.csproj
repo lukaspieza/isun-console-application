@@ -14,11 +14,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
 		<PackageReference Include="NLog" Version="5.0.1" />
 		<PackageReference Include="NLog.Schema" Version="5.0.1" />
 		<PackageReference Include="NLog.Web.AspNetCore" Version="5.1.0" />
@@ -27,6 +25,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\isun.Domain\isun.Domain.csproj" />
 		<ProjectReference Include="..\isun.Infrastructure\isun.Infrastructure.csproj" />
+		<ProjectReference Include="..\isun.Startup\isun.Startup.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
