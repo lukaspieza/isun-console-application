@@ -3,6 +3,7 @@ using isun.Domain.Interfaces;
 using isun.Domain.Interfaces.Infrastructure;
 using isun.Domain.Models.Options;
 using isun.Infrastructure.Implementations;
+using isun.Infrastructure.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +19,7 @@ public static class Startup
         services.AddTransient<ICitiesProvider, CitiesProvider>();
         services.AddTransient<IArgumentsOperationsProvider, ArgumentsOperationsProvider>();
         services.AddTransient<IExternalCityWeatherForecastProvider, ExternalCityWeatherForecastProvider>();
+        services.AddTransient<IExternalCityWeatherForecastOperationsProvider, ExternalCityWeatherForecastOperationsProvider>();
         return services;
     }
 }
