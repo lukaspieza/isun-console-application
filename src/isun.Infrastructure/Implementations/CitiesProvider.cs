@@ -1,6 +1,9 @@
-﻿using isun.Domain.Interfaces.Infrastructure;
+﻿using isun.Domain.Exceptions;
+using isun.Domain.Interfaces.Infrastructure;
 using isun.Domain.Models;
+using isun.Domain.Models.Options;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace isun.Infrastructure.Implementations;
 
@@ -8,11 +11,14 @@ public class CitiesProvider : ICitiesProvider
 {
     private readonly IArgumentsOperationsProvider _operations;
     private readonly ILogger<CitiesProvider> _logger;
+    private readonly CityOptions _options;
 
     public CitiesProvider(
         IArgumentsOperationsProvider operations,
-        ILogger<CitiesProvider> logger)
+        ILogger<CitiesProvider> logger,
+        IOptions<AppOptions> options)
     {
+        _options = options.Value.City;
         _operations = operations;
         _logger = logger;
     }
@@ -23,13 +29,20 @@ public class CitiesProvider : ICitiesProvider
         var message = args != null
             ? $"No --cities provided in args={string.Join(" ", args)}"
             : "No --cities provided in args=null";
+        if (_options.ThrowExceptionOnNotFoundCity)
+            throw new CityNotProvidedException(message);
+
         _logger.LogWarning("{message}", message);
         return new List<CityWeatherForecast>();
     }
 
     public List<CityWeatherForecast> HandleNoCitiesProvided()
     {
-        _logger.LogWarning("No cities were provided");
+        const string message = "No cities were provided";
+        if (_options.ThrowExceptionOnNotFoundCity)
+            throw new CityNotProvidedException(message);
+
+        _logger.LogWarning("{message}", message);
         return new List<CityWeatherForecast>();
     }
 
