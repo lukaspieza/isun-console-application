@@ -22,6 +22,7 @@ public class CitiesProviderTests
         _mockProvider = new Mock<IArgumentsOperationsProvider>();
         _mockLogger = new Mock<ILogger<CitiesProvider>>();
         _mockOptions = new Mock<IOptions<AppOptions>>();
+        _mockOptions.Setup(a => a.Value).Returns(new AppOptions());
         _arguments = new[] { ExpectedArgument };
     }
 
