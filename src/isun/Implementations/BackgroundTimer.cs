@@ -40,6 +40,7 @@ public class BackgroundTimer : IBackgroundTimer
 
     public async Task StopAsync()
     {
+        _logger.LogInformation("Stop command received");
         if (_timerTask is null)
         {
             return;
@@ -48,6 +49,7 @@ public class BackgroundTimer : IBackgroundTimer
         _cts.Cancel();
         await _timerTask;
         _cts.Dispose();
+        _logger.LogInformation("Stop executed successfully");
     }
 
     private async Task PrintWeatherForecastsTask()

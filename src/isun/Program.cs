@@ -13,13 +13,13 @@ try
     var host = CreateHostBuilder(args).Build();
     var task = host.Services.GetRequiredService<IBackgroundTimer>();
     task.Start(args);
-    Console.ReadKey();
+    Console.ReadKey(true);
     await task.StopAsync();
 }
 catch (Exception e)
 {
     Console.WriteLine(e);
-    Console.ReadKey();
+    Console.ReadKey(true);
 }
 
 static IHostBuilder CreateHostBuilder(string[] args)
