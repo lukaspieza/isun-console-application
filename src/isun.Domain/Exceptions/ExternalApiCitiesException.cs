@@ -1,6 +1,6 @@
 ﻿namespace isun.Domain.Exceptions;
 
-public class ExternalApiCitiesException : BaseException
+public class ExternalApiCitiesException : Exception
 {
     public ExternalApiCitiesException()
     {

@@ -1,6 +1,6 @@
 ﻿namespace isun.Domain.Exceptions;
 
-public class CityNotProvidedException : BaseException
+public class CityNotProvidedException : Exception
 {
     public CityNotProvidedException()
     {

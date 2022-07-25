@@ -1,6 +1,6 @@
 ﻿namespace isun.Domain.Exceptions;
 
-public class ExternalApiAuthorizationHeaderException : BaseException
+public class ExternalApiAuthorizationHeaderException : Exception
 {
     public ExternalApiAuthorizationHeaderException()
     {

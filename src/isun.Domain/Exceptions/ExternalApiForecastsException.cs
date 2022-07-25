@@ -1,6 +1,6 @@
 ﻿namespace isun.Domain.Exceptions;
 
-public class ExternalApiForecastsException : BaseException
+public class ExternalApiForecastsException : Exception
 {
     public ExternalApiForecastsException()
     {
