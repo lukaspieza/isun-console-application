@@ -20,6 +20,7 @@ public static class Startup
         services.AddTransient<IArgumentsOperationsProvider, ArgumentsOperationsProvider>();
         services.AddTransient<IExternalCityWeatherForecastProvider, ExternalCityWeatherForecastProvider>();
         services.AddTransient<IExternalCityWeatherForecastOperationsProvider, ExternalCityWeatherForecastOperationsProvider>();
+        services.AddTransient<ISaveProvider, SaveProvider>();
         return services;
     }
 }
