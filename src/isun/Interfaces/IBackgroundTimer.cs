@@ -2,6 +2,7 @@
 
 public interface IBackgroundTimer
 {
-    void Start(string[]? arguments);
+    string[]? Arguments { get; set; }
+    void Start();
     Task StopAsync();
 }

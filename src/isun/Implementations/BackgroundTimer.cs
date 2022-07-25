@@ -1,38 +1,39 @@
 ﻿using isun.Domain.Interfaces;
 using isun.Interfaces;
 using isun.Models;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace isun.Implementations;
 
 public class BackgroundTimer : IBackgroundTimer
 {
+    public string[]? Arguments { get; set; }
     private readonly IWeatherForecastService _forecastService;
     private readonly CancellationTokenSource _cts = new();
-    private readonly ILogger<BackgroundTimer> _logger;
     private readonly BackgroundTimerOptions _options;
+    private readonly IConsoleProvider _console;
     private PeriodicTimer _timer = null!;
-    private string[]? _arguments;
     private Task? _timerTask;
 
     public BackgroundTimer(
         IOptions<BackgroundTimerOptions> options,
         IWeatherForecastService forecastService,
-        ILogger<BackgroundTimer> logger)
+        IConsoleProvider console)
     {
         _forecastService = forecastService;
         _options = options.Value;
-        _logger = logger;
+        _console = console;
     }
 
-    public void Start(string[]? arguments)
+    public void Start()
     {
         if (_options.RunEverySeconds <= 1)
-            throw new Exception("BackgroundTimerOptions.RunEverySeconds should be bigger than 1 second.");
+            throw new ArgumentException("BackgroundTimerOptions.RunEverySeconds should be bigger than 1 second.");
 
-        _logger.LogInformation("Press any key to stop the task");
-        _arguments = arguments;
+        if (Arguments is null)
+            throw new ArgumentException("Arguments not provided for BackgroundTimer");
+
+        _console.Write("Press any key to stop the task");
         var interval = TimeSpan.FromMilliseconds(1000 * _options.RunEverySeconds);
         _timer = new PeriodicTimer(interval);
         _timerTask = PrintWeatherForecastsTask();
@@ -40,7 +41,7 @@ public class BackgroundTimer : IBackgroundTimer
 
     public async Task StopAsync()
     {
-        _logger.LogInformation("Stop command received");
+        _console.Write("Stop command received");
         if (_timerTask is null)
         {
             return;
@@ -49,7 +50,7 @@ public class BackgroundTimer : IBackgroundTimer
         _cts.Cancel();
         await _timerTask;
         _cts.Dispose();
-        _logger.LogInformation("Stop executed successfully");
+        _console.Write("Stop executed successfully");
     }
 
     private async Task PrintWeatherForecastsTask()
@@ -64,8 +65,8 @@ public class BackgroundTimer : IBackgroundTimer
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "");
-            _logger.LogInformation("Press any key to stop the task");
+            _console.Write(e);
+            _console.Write("Press any key to stop the task");
         }
     }
 
@@ -74,16 +75,16 @@ public class BackgroundTimer : IBackgroundTimer
         do
         {
             PrintWeatherForecasts();
-            _logger.LogInformation("Next update in {_options.RunEverySeconds} seconds", _options.RunEverySeconds);
+            _console.Write($"Next update in {_options.RunEverySeconds} seconds");
         } while (await _timer.WaitForNextTickAsync(_cts.Token));
     }
 
     private void PrintWeatherForecasts()
     {
-        foreach (var cityWeatherForecast in _forecastService.GetWeatherForecast(_arguments))
+        foreach (var cityWeatherForecast in _forecastService.GetWeatherForecasts(Arguments))
         {
             var forecast = cityWeatherForecast.ToString();
-            _logger.LogInformation("{forecast}", forecast);
+            _console.Write(forecast);
         }
     }
 }

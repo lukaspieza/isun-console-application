@@ -11,10 +11,11 @@ using NLog.Web;
 try
 {
     var host = CreateHostBuilder(args).Build();
-    var task = host.Services.GetRequiredService<IBackgroundTimer>();
-    task.Start(args);
+    var backgroundTimer = host.Services.GetRequiredService<IBackgroundTimer>();
+    backgroundTimer.Arguments = args;
+    backgroundTimer.Start();
     Console.ReadKey(true);
-    await task.StopAsync();
+    await backgroundTimer.StopAsync();
 }
 catch (Exception e)
 {
@@ -34,6 +35,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         {
             services.Configure<BackgroundTimerOptions>(options => context.Configuration.GetSection("BackgroundTimerOptions").Bind(options));
             services.AddTransient<IBackgroundTimer, BackgroundTimer>();
+            services.AddTransient<IConsoleProvider, ConsoleProvider>();
             services.AddLogging(builder => builder.ClearProviders());
             services.ConfigureSun(context.Configuration);
         })
