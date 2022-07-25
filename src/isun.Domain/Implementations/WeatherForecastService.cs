@@ -10,15 +10,36 @@ public class WeatherForecastService : IWeatherForecastService
     private readonly IExternalCityWeatherForecastProvider _external;
     private readonly ILogger<WeatherForecastService> _logger;
     private readonly ICitiesProvider _citiesProvider;
+    private readonly ISaveProvider _saveProvider;
+    private readonly IConsoleProvider _console;
 
     public WeatherForecastService(
         IExternalCityWeatherForecastProvider external,
         ILogger<WeatherForecastService> logger,
-        ICitiesProvider citiesProvider)
+        ICitiesProvider citiesProvider,
+        ISaveProvider saveProvider,
+        IConsoleProvider console)
     {
         _citiesProvider = citiesProvider;
+        _saveProvider = saveProvider;
         _external = external;
+        _console = console;
         _logger = logger;
+    }
+
+    public void PrintWeatherForecasts(List<CityWeatherForecast> weatherForecasts)
+    {
+        foreach (var cityWeatherForecast in weatherForecasts)
+        {
+            var forecast = cityWeatherForecast.ToString();
+            _console.Write(forecast);
+        }
+    }
+
+    public void SaveWeatherForecasts(List<CityWeatherForecast> weatherForecasts)
+    {
+        foreach (var cityWeatherForecast in weatherForecasts)
+            _saveProvider.Save(cityWeatherForecast);
     }
 
     public List<CityWeatherForecast> GetWeatherForecasts(string[]? args)

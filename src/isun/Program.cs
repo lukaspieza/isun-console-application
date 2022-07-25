@@ -35,7 +35,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
         {
             services.Configure<BackgroundTimerOptions>(options => context.Configuration.GetSection("BackgroundTimerOptions").Bind(options));
             services.AddTransient<IBackgroundTimer, BackgroundTimer>();
-            services.AddTransient<IConsoleProvider, ConsoleProvider>();
             services.AddLogging(builder => builder.ClearProviders());
             services.ConfigureSun(context.Configuration);
         })

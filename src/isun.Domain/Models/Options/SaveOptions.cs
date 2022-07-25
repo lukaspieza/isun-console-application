@@ -2,7 +2,7 @@
 
 public class SaveOptions
 {
-    private string _directory = "/data";
+    private string _directory = "data";
 
     public string Directory
     {

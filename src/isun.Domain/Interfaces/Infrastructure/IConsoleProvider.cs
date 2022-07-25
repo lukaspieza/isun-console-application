@@ -1,4 +1,4 @@
-﻿namespace isun.Interfaces;
+﻿namespace isun.Domain.Interfaces.Infrastructure;
 
 public interface IConsoleProvider
 {

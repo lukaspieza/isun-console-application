@@ -1,7 +1,7 @@
-﻿using isun.Interfaces;
+﻿using isun.Domain.Interfaces.Infrastructure;
 using Microsoft.Extensions.Logging;
 
-namespace isun.Implementations;
+namespace isun.Infrastructure.Implementations;
 
 public class ConsoleProvider : IConsoleProvider
 {

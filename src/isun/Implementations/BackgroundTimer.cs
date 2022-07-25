@@ -1,4 +1,5 @@
 ﻿using isun.Domain.Interfaces;
+using isun.Domain.Interfaces.Infrastructure;
 using isun.Interfaces;
 using isun.Models;
 using Microsoft.Extensions.Options;
@@ -44,6 +45,7 @@ public class BackgroundTimer : IBackgroundTimer
         _console.Write("Stop command received");
         if (_timerTask is null)
         {
+            _console.Write("Stop executed successfully");
             return;
         }
 
@@ -74,17 +76,10 @@ public class BackgroundTimer : IBackgroundTimer
     {
         do
         {
-            PrintWeatherForecasts();
+            var forecasts = _forecastService.GetWeatherForecasts(Arguments);
+            _forecastService.PrintWeatherForecasts(forecasts);
+            _forecastService.SaveWeatherForecasts(forecasts);
             _console.Write($"Next update in {_options.RunEverySeconds} seconds");
         } while (await _timer.WaitForNextTickAsync(_cts.Token));
-    }
-
-    private void PrintWeatherForecasts()
-    {
-        foreach (var cityWeatherForecast in _forecastService.GetWeatherForecasts(Arguments))
-        {
-            var forecast = cityWeatherForecast.ToString();
-            _console.Write(forecast);
-        }
     }
 }
