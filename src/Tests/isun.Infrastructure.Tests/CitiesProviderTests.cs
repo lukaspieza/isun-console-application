@@ -1,3 +1,4 @@
+using isun.Domain.Exceptions;
 using isun.Domain.Interfaces.Infrastructure;
 using isun.Domain.Models.Options;
 using isun.Infrastructure.Implementations;
@@ -27,68 +28,23 @@ public class CitiesProviderTests
     }
 
     [Test]
-    public void NullArgumentsProvided_ExpectEmptyList()
+    public void NullArgumentsProvided_ExpectCityNotProvidedException()
     {
         // Arrange
         _arguments = null;
-        const int expectedCount = 0;
 
         // Act
-        var actual = GetCitiesProvider().Get(_arguments);
+        try
+        {
+            GetCitiesProvider().GetCities(_arguments);
+        }
+        catch (CityNotProvidedException)
+        {
+            // Assert
+            Assert.Pass();
+        }
 
-        // Assert
-        Assert.That(actual, Has.Count.EqualTo(expectedCount));
-    }
-
-    [Test]
-    public void EmptyArgumentsProvided_ExpectEmptyList()
-    {
-        // Arrange
-        _arguments = Array.Empty<string>();
-        const int expectedCount = 0;
-
-        // Act
-        var actual = GetCitiesProvider().Get(_arguments);
-
-        // Assert
-        Assert.That(actual, Has.Count.EqualTo(expectedCount));
-    }
-
-    [Test]
-    public void ArgumentsOperationsProvider_VariableNameCities_CalledOnce()
-    {
-        // Arrange
-
-        // Act
-        GetCitiesProvider().Get(_arguments);
-
-        // Assert
-        _mockProvider.Verify(a => a.VariableNameCities(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-    }
-
-    [Test]
-    public void ArgumentsOperationsProvider_VariableNameCities_CalledWithArgument()
-    {
-        // Arrange
-
-        // Act
-        GetCitiesProvider().Get(_arguments);
-
-        // Assert
-        _mockProvider.Verify(a => a.VariableNameCities(It.Is<string>(b => b == ExpectedArgument), It.IsAny<string>()));
-    }
-
-    [Test]
-    public void ArgumentsOperationsProvider_VariableNameCities_CalledWithDefaultVariableName()
-    {
-        // Arrange
-        const string expectedVariableName = "--cities";
-
-        // Act
-        GetCitiesProvider().Get(_arguments);
-
-        // Assert
-        _mockProvider.Verify(a => a.VariableNameCities(It.IsAny<string>(), It.Is<string>(b => b == expectedVariableName)));
+        Assert.Fail("Expected ExternalApiCitiesException");
     }
 
     [Test]
@@ -101,7 +57,7 @@ public class CitiesProviderTests
         _arguments = new[] { notExpectedVariableName, "Vilnius" };
 
         // Act
-        var actual = GetCitiesProvider().Get(_arguments);
+        var actual = GetCitiesProvider().GetCities(_arguments);
 
         // Assert
         Assert.That(actual, Has.Count.EqualTo(expectedCount));
@@ -118,7 +74,7 @@ public class CitiesProviderTests
         _arguments = new[] { "--cities", ExpectedCityOne };
 
         // Act
-        var actual = GetCitiesProvider().Get(_arguments);
+        var actual = GetCitiesProvider().GetCities(_arguments);
 
         // Assert
         Assert.That(actual, Has.Count.EqualTo(expectedCount));
@@ -135,7 +91,7 @@ public class CitiesProviderTests
         _arguments = new[] { "--cities", ExpectedCityOne, "--other", "otherValue" };
 
         // Act
-        var actual = GetCitiesProvider().Get(_arguments);
+        var actual = GetCitiesProvider().GetCities(_arguments);
 
         // Assert
         Assert.That(actual, Has.Count.EqualTo(expectedCount));
@@ -152,7 +108,7 @@ public class CitiesProviderTests
         _arguments = new[] { "--cities", ExpectedCityOne, ExpectedCityTwo };
 
         // Act
-        var actual = GetCitiesProvider().Get(_arguments);
+        var actual = GetCitiesProvider().GetCities(_arguments);
 
         // Assert
         Assert.That(actual, Has.Count.EqualTo(expectedCount));
@@ -170,7 +126,7 @@ public class CitiesProviderTests
         _arguments = new[] { "--cities", ExpectedCityOne, ExpectedCityTwo, "--other", "otherValue" };
 
         // Act
-        var actual = GetCitiesProvider().Get(_arguments);
+        var actual = GetCitiesProvider().GetCities(_arguments);
 
         // Assert
         Assert.That(actual, Has.Count.EqualTo(expectedCount));
@@ -188,7 +144,7 @@ public class CitiesProviderTests
         _arguments = new[] { "--cities", $"{ExpectedCityOne},{ExpectedCityTwo}", "--other", "otherValue" };
 
         // Act
-        var actual = GetCitiesProvider().Get(_arguments);
+        var actual = GetCitiesProvider().GetCities(_arguments);
 
         // Assert
         Assert.That(actual, Has.Count.EqualTo(expectedCount));
@@ -206,7 +162,7 @@ public class CitiesProviderTests
         _arguments = new[] { "--cities", $"{ExpectedCityOne},", ExpectedCityTwo, "--other", "otherValue" };
 
         // Act
-        var actual = GetCitiesProvider().Get(_arguments);
+        var actual = GetCitiesProvider().GetCities(_arguments);
 
         // Assert
         Assert.That(actual, Has.Count.EqualTo(expectedCount));
@@ -223,7 +179,7 @@ public class CitiesProviderTests
         _arguments = new[] { "--cities", "Vilnius,", "Kaunas", "--other", "otherValue" };
 
         // Act
-        GetCitiesProvider().Get(_arguments);
+        GetCitiesProvider().GetCities(_arguments);
 
         // Assert
         _mockProvider.Verify(a => a.ArgumentIsNotEmpty(It.IsAny<string>()), Times.Exactly(3));

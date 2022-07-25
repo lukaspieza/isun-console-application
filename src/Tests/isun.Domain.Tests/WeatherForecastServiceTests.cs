@@ -7,7 +7,7 @@ namespace isun.Domain.Tests;
 
 public class WeatherForecastServiceTests
 {
-    private Mock<IExternalCityWeatherForecastProvider> _weatherForecastProviderMock;
+    private Mock<IExternalCityWeatherForecastProvider> _weatherForecastProviderMock = null!;
     private Mock<ILogger<WeatherForecastService>> _mockLogger = null!;
     private Mock<ICitiesProvider> _mockCitiesProvider = null!;
     private string[]? _arguments;
@@ -18,7 +18,7 @@ public class WeatherForecastServiceTests
         _weatherForecastProviderMock = new Mock<IExternalCityWeatherForecastProvider>();
         _mockLogger = new Mock<ILogger<WeatherForecastService>>();
         _mockCitiesProvider = new Mock<ICitiesProvider>();
-        _mockCitiesProvider.Setup(a => a.Get(It.IsAny<string[]?>()))
+        _mockCitiesProvider.Setup(a => a.GetCities(It.IsAny<string[]?>()))
             .Returns(new List<string>());
         _arguments = null;
     }
@@ -29,10 +29,10 @@ public class WeatherForecastServiceTests
         // Arrange
 
         // Act
-        GetWeatherForecastService().GetWeatherForecast(_arguments);
+        GetWeatherForecastService().GetWeatherForecasts(_arguments);
 
         // Assert
-        _mockCitiesProvider.Verify(a => a.Get(It.IsAny<string[]?>()), Times.Once);
+        _mockCitiesProvider.Verify(a => a.GetCities(It.IsAny<string[]?>()), Times.Once);
     }
 
     [Test]
@@ -41,34 +41,10 @@ public class WeatherForecastServiceTests
         // Arrange
 
         // Act
-        GetWeatherForecastService().GetWeatherForecast(_arguments);
+        GetWeatherForecastService().GetWeatherForecasts(_arguments);
 
         // Assert
-        _mockCitiesProvider.Verify(a => a.Get(It.Is<string[]?>(b => b == _arguments)));
-    }
-
-    [Test]
-    public void EmptyArgumentsProvidedGetMissingArgumentsMessage_CalledOnce()
-    {
-        // Arrange
-
-        // Act
-        GetWeatherForecastService().GetWeatherForecast(_arguments);
-
-        // Assert
-        _mockCitiesProvider.Verify(a => a.HandleNoCitiesProvided(It.IsAny<string[]?>()), Times.Once);
-    }
-
-    [Test]
-    public void EmptyArgumentsProvidedGetMissingArgumentsMessage_CalledWithArguments()
-    {
-        // Arrange
-
-        // Act
-        GetWeatherForecastService().GetWeatherForecast(_arguments);
-
-        // Assert
-        _mockCitiesProvider.Verify(a => a.HandleNoCitiesProvided(It.Is<string[]?>(b => b == _arguments)));
+        _mockCitiesProvider.Verify(a => a.GetCities(It.Is<string[]?>(b => b == _arguments)));
     }
 
     private WeatherForecastService GetWeatherForecastService()

@@ -4,7 +4,6 @@ namespace isun.Domain.Interfaces.Infrastructure;
 
 public interface ICitiesProvider
 {
-    List<CityWeatherForecast> HandleNoCitiesProvided(string[]? args);
     List<CityWeatherForecast> HandleNoCitiesProvided();
-    List<string> Get(string[]? args);
+    List<string> GetCities(string[]? args);
 }

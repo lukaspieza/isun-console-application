@@ -21,16 +21,14 @@ public class WeatherForecastService : IWeatherForecastService
         _logger = logger;
     }
 
-    public List<CityWeatherForecast> GetWeatherForecast(string[]? args)
+    public List<CityWeatherForecast> GetWeatherForecasts(string[]? args)
     {
         _logger.LogDebug("Getting Weather Forecast with arguments");
-        var cities = _citiesProvider.Get(args);
-        return cities.Any()
-            ? GetWeatherForecast(cities)
-            : _citiesProvider.HandleNoCitiesProvided(args);
+        var cities = _citiesProvider.GetCities(args);
+        return GetWeatherForecasts(cities);
     }
 
-    public List<CityWeatherForecast> GetWeatherForecast(List<string> cities)
+    public List<CityWeatherForecast> GetWeatherForecasts(List<string> cities)
     {
         _logger.LogDebug("Getting Weather Forecast with cities");
         if (!cities.Any())
