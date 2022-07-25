@@ -4,6 +4,6 @@ namespace isun.Domain.Interfaces;
 
 public interface IWeatherForecastService
 {
-    List<CityWeatherForecast> GetWeatherForecast(List<string> cities);
-    List<CityWeatherForecast> GetWeatherForecast(string[]? args);
+    List<CityWeatherForecast> GetWeatherForecasts(List<string> cities);
+    List<CityWeatherForecast> GetWeatherForecasts(string[]? args);
 }
