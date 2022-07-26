@@ -28,6 +28,39 @@ public class CitiesProviderTests
     }
 
     [Test]
+    public void HandleNoCitiesProvided_EmptyListReturned()
+    {
+        // Arrange
+        const int expectedCount = 0;
+
+        // Act
+        var actual = GetCitiesProvider().HandleNoCitiesProvided();
+
+        // Assert
+        Assert.That(actual, Has.Count.EqualTo(expectedCount));
+    }
+
+    [Test]
+    public void HandleNoCitiesProvided_ExceptionEnabledCityNotProvidedExceptionThrown()
+    {
+        // Arrange
+        _mockOptions.Setup(a => a.Value).Returns(new AppOptions { City = new CityOptions { ThrowExceptionOnNotFoundCity = true } });
+
+        // Act
+        try
+        {
+            GetCitiesProvider().HandleNoCitiesProvided();
+        }
+        catch (CityNotProvidedException)
+        {
+            // Assert
+            Assert.Pass();
+        }
+
+        Assert.Fail("Expected ExternalApiCitiesException");
+    }
+
+    [Test]
     public void NullArgumentsProvided_ExpectCityNotProvidedException()
     {
         // Arrange
