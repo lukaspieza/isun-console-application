@@ -2,7 +2,7 @@
   "profiles": {
     "isun": {
       "commandName": "Project",
-      "commandLineArgs": "--cities Vilnius, Kaunas, Klaipėda"
+      "commandLineArgs": "--other bla, bla1 --cities Vilnius, Kaunas, Klaipėda, Miestas"
     }
   }
 }
